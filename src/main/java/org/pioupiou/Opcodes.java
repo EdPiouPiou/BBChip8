@@ -9,7 +9,7 @@ public class Opcodes {
     private String Vx;
     private String Vy;
     private String currentMemoryAddress;
-    private String adressI;
+    private int adressI;
     private int programCounter;
     private int delayTimer;
     private int soundTimer;
@@ -50,94 +50,95 @@ public class Opcodes {
                 programCounter = opcodeInt & 0xFFF;
             }
             case String s when s.matches("^3([A-F0-9]{3})") -> {
-                Vx = "V" + opcode.charAt(1);
-                if (Vx.equals(opcode.substring(2))) {
+                int nn = Integer.parseInt(opcode.substring(2),16);
+                if (registersV[x] == nn) {
                     programCounter += 2;
                 }
             }
             case String s when s.matches("^4([A-F0-9]{3})") -> {
-                Vx = "V" + opcode.charAt(1);
-                if (!Vx.equals(opcode.substring(2))) {
+                int nn = Integer.parseInt(opcode.substring(2),16);
+                if (registersV[x] != nn) {
                     programCounter += 2;
                 }
             }
 
             case String s when s.matches("^5([A-F0-9]{2}0)") -> {
-                Vx = "V" + opcode.charAt(1);
-                Vy = "V" + opcode.charAt(2);
-                if (Vx.equals(Vy)) {
+                if (registersV[x] == registersV [y]) {
                     programCounter += 2;
                 }
             }
-            case String s when s.matches("^6([A-F0-9]{3})") -> Vx = opcode.substring(2);
+            case String s when s.matches("^6([A-F0-9]{3})") -> {
+                int nn = Integer.parseInt(opcode.substring(2),16);
+                registersV[x] = nn;
+            }
             case String s when s.matches("^7([A-F0-9]{3})") -> {
-                Vx = "V" + opcode.charAt(1);
-                if (Vx.equals("VF")) {
-                    Vx = Integer.toHexString(Integer.parseInt(Vx, 16) + Integer.parseInt(opcode.substring(2), 16));
+                int nn = Integer.parseInt(opcode.substring(2),16);
+                if (registersV[x] == registersV[0xF]) {
+                    registersV[x] += nn;
                 }
             }
-            case String s when s.matches("^8([A-F0-9]{2})0") -> Vx = "V" + opcode.charAt(2);
+            case String s when s.matches("^8([A-F0-9]{2})0") -> {
+                registersV[x] = registersV[y];
+            }
             case String s when s.matches("^8([A-F0-9]{2})1") -> {
-                Vx = "V" + opcode.charAt(1);
-                Vx = Integer.toHexString(Integer.parseInt(Vx, 16) | Integer.parseInt(opcode.substring(2), 16));
+                registersV[x] = registersV[x] | registersV[y];
             }
             case String s when s.matches("^8([A-F0-9]{2})2") -> {
-                Vx = "V" + opcode.charAt(1);
-                Vx = Integer.toHexString(Integer.parseInt(Vx, 16) & Integer.parseInt(opcode.substring(2), 16));
+                registersV[x] = registersV[x] & registersV[y];
             }
             case String s when s.matches("^8([A-F0-9]{2})3") -> {
-                Vx = "V" + opcode.charAt(1);
-                Vx = Integer.toHexString(Integer.parseInt(Vx, 16) ^ Integer.parseInt(opcode.substring(2), 16));
+                registersV[x] = registersV[x] ^ registersV[y];
             }
             case String s when s.matches("^8([A-F0-9]{2})4") -> {
-                Vx = "V" + opcode.charAt(1);
-                Vy = "V" + opcode.charAt(2);
-                int tempResultOverflow = Integer.parseInt(Vx, 16) + Integer.parseInt(Vy, 16); //used to check for overflow
-                if (tempResultOverflow < 0) { //check for overflow
-                    Vf = 1;
+                if (registersV[x] + registersV[y] > 255) { //check for overflow
+                    registersV[0xF] = 1;
+                    registersV[x] = (registersV[x] + registersV[y]) << 8; //shift left by 8 to keep lowest 8 bits ? //TODO
                 } else {
-                    Vf = 0;
+                    registersV[0xF] = 0;
+                    registersV[x] = registersV[x] + registersV[y];
                 }
             }
             case String s when s.matches("^8([A-F0-9]{2})5") -> {
-                Vx = "V" + opcode.charAt(1);
-                Vy = "V" + opcode.charAt(2);
-                if (Integer.parseInt(Vx, 16) >= Integer.parseInt(Vy, 16)) { //check for underflow
-                    Vf = 1;
+                if (registersV[x] <= registersV[y]) { //check for underflow
+                    registersV[0xF] = 1;
                 } else {
-                    Vf = 0;
+                    registersV[0xF] = 0;
+                    registersV[x] = registersV[x] - registersV[y];
                 }
+
             }
             case String s when s.matches("^8([A-F0-9]{2})6") -> {
                 //store least significant bit of VX before shift to VF
-                Vf = x & 0x1;
+                registersV[0xF] = x & 0x1;
                 //right shift Vx by one
                 x >>= 1;
 
             }
             case String s when s.matches("^8([A-F0-9]{2})7") -> {
-                Vx = Integer.toHexString( Integer.parseInt(Vx, 16) - Integer.parseInt(Vy, 16));
-                if(Integer.parseInt(Vy, 16) >= Integer.parseInt(Vx, 16)) {
-                    Vf = 1;
+                if (registersV[y] <= registersV[x]) { //check for underflow
+                    registersV[0xF] = 1;
                 }
-                else Vf = 0;
+                else {
+                    registersV[x] = registersV[y] - registersV[x];
+                    registersV[0xF] = 0;
+                }
             }
             case String s when s.matches("^8([A-F0-9]{2})E") -> {
                 //store least significant bit of VX before shift to VF
-                Vf = x & 0x1;
+                registersV[0xF] = x & 0x1;
                 //left shift Vx by one
                 x <<= 1;
 
             }
             case String s when s.matches("^9([A-F0-9]{2})0") -> {
-                Vx = "V" + opcode.charAt(1);
-                Vy = "V" + opcode.charAt(2);
-                if (Vx.equals(Vy)) {
-                    skip();
+                if (registersV[x] == registersV[y]) {
+                    programCounter += 2;
                 }
             }
-            case String s when s.matches("^A([A-F0-9]{3})") -> adressI = opcode.substring(1);
-            case String s when s.matches("^B([A-F0-9]{3})") -> programCounter = Integer.parseInt("V0", 16) + Integer.parseInt(opcode.substring(1),16);
+            case String s when s.matches("^A([A-F0-9]{3})") -> adressI = Integer.parseInt(opcode.substring(1),16);
+            case String s when s.matches("^B([A-F0-9]{3})") -> {
+                programCounter = registersV[0x0] + Integer.parseInt(opcode.substring(1), 16);
+            }
             case String s when s.matches("^C([A-F0-9]{3})") -> {
                 int random = (int) (Math.random() * (255 - 0) + 0);
                 Vx = Integer.toHexString(random & Integer.parseInt(opcode.substring(2), 16));
@@ -152,7 +153,7 @@ public class Opcodes {
                 int nibble = Integer.parseInt(opcode.substring(5)); //DXYN got as 0xDXYN so N is last nibble, it represents the height of the sprite
                 for(int heightIndex = 0; heightIndex < nibble; heightIndex++){
                     //read sprite from memory
-                    int sprite = memory[Integer.parseInt(adressI,16) + heightIndex];
+                    int sprite = memory[adressI + heightIndex];
 
                     //draw sprite, each sprite is 8 pixels wide
                     for(int column = 0; column < 8; column++){
@@ -178,17 +179,17 @@ public class Opcodes {
                     programCounter += 2;
                 }
             }
-            case String s when s.matches("^F[A-F0-9]07") -> Vx = Integer.toHexString(getDelay());
-            case String s when s.matches("^F[A-F0-9]0A") -> Vx = Integer.toHexString(getKey());
-            case String s when s.matches("^F[A-F0-9]15") -> delayTimer = Integer.parseInt(Vx, 16);
-            case String s when s.matches("^F[A-F0-9]18") -> soundTimer = Integer.parseInt(Vx, 16);
+            case String s when s.matches("^F[A-F0-9]07") -> registersV[x] = getDelay();
+            case String s when s.matches("^F[A-F0-9]0A") -> registersV[x] = getKey();
+            case String s when s.matches("^F[A-F0-9]15") -> delayTimer = registersV[x];
+            case String s when s.matches("^F[A-F0-9]18") -> soundTimer = registersV[x];
             case String s when s.matches("^F[A-F0-9]1E") -> {
-                if(!Vx.equals("VF")){
-                    adressI = Integer.toHexString(Integer.parseInt(adressI, 16) + Integer.parseInt(Vx,16));
+                if(registersV[x] != registersV[0xF]){
+                    adressI += registersV[x];
                 }
             }
             case String s when s.matches("^F[A-F0-9]29") -> {
-                adressI = Integer.toHexString(x*5); //multiplied by 5 because each sprite is 4*5 bit long
+                adressI = x*5; //multiplied by 5 because each sprite is 4*5 bit long
             }
             case String s when s.matches("^F[A-F0-9]33") -> {
                 String decimal = "01010110"; //V = 56 = 0101 0110 en binaire
