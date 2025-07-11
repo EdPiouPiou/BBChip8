@@ -109,7 +109,7 @@ public class Opcodes {
                 }
             }
             case String s when s.matches("^8([A-F0-9]{2})6") -> {
-                //store least significant bit of VX before shift to VF "ERROR : NOT IMPLEMENTED"
+                //store least significant bit of VX before shift to VF
                 Vf = x & 0x1;
                 //right shift Vx by one
                 x >>= 1;
@@ -123,7 +123,7 @@ public class Opcodes {
                 else Vf = 0;
             }
             case String s when s.matches("^8([A-F0-9]{2})E") -> {
-                //store least significant bit of VX before shift to VF "ERROR : NOT IMPLEMENTED"
+                //store least significant bit of VX before shift to VF
                 Vf = x & 0x1;
                 //left shift Vx by one
                 x <<= 1;
@@ -143,9 +143,28 @@ public class Opcodes {
                 Vx = Integer.toHexString(random & Integer.parseInt(opcode.substring(2), 16));
             }
             case String s when s.matches("^D([A-F0-9]{3})") -> {
-                //"ERROR : NOT IMPLEMENTED"
-                //coordinates X
-                //coordinates Y
+                //init VF to 0
+                registersV[0xF] = 0;
+                //coordinates X stocked in Vx
+                int coordX = registersV[x];
+                //coordinates Y stocked in Vy
+                int coordY = registersV[y];
+                int nibble = Integer.parseInt(opcode.substring(5)); //DXYN got as 0xDXYN so N is last nibble, it represents the height of the sprite
+                for(int heightIndex = 0; heightIndex < nibble; heightIndex++){
+                    //read sprite from memory
+                    int sprite = memory[Integer.parseInt(adressI,16) + heightIndex];
+
+                    //draw sprite, each sprite is 8 pixels wide
+                    for(int column = 0; column < 8; column++){
+                        if((sprite & 0x80) > 0 ) { //if bit/sprite not 0, render or erase the pixel at given column
+                            if(this.renderSprite( registersV[x] + column, registersV[y] + heightIndex) == 1){ //set Vf to 1 if pixel is erased
+                                registersV[0xF] = 1;
+                            }
+                        }
+                        sprite <<= 1; //left shift sprite by 1 to move next column/bit of the sprite
+                    }
+                }
+
                 //compare values between already present pixel and new one with a XOR op
 
             }
@@ -222,6 +241,10 @@ public class Opcodes {
     }
 
     private int getKey(){
+        return 0;
+    }
+
+    private int renderSprite(int coordX, int coordY){
         return 0;
     }
 }
