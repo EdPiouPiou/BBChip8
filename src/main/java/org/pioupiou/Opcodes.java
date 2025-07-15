@@ -6,15 +6,11 @@ import java.util.List;
 public class Opcodes {
     private boolean[][] display;
     private int[] memory; //binary
-    private String Vx;
-    private String Vy;
-    private String currentMemoryAddress;
     private int adressI;
     private int programCounter;
     private int delayTimer;
     private int soundTimer;
     private int key;
-    private int Vf;
     private List<Integer> routineStack = new ArrayList<>();
     private int stackPointer; //maybe put it in Chip8 later
     private int x;
@@ -22,7 +18,7 @@ public class Opcodes {
     private int opcodeInt;
     private int[] registersV = new int[16];
 
-    public Opcodes(boolean[][] display, int[] memory, String Vx, String Vy) {
+    public Opcodes(boolean[][] display, int[] memory) {
         this.display = display;
         this.memory = memory;
     }
@@ -141,7 +137,7 @@ public class Opcodes {
             }
             case String s when s.matches("^C([A-F0-9]{3})") -> {
                 int random = (int) (Math.random() * (255 - 0) + 0);
-                Vx = Integer.toHexString(random & Integer.parseInt(opcode.substring(2), 16));
+                registersV[x] = random & Integer.parseInt(opcode.substring(2), 16);
             }
             case String s when s.matches("^D([A-F0-9]{3})") -> {
                 //init VF to 0
@@ -194,35 +190,33 @@ public class Opcodes {
             case String s when s.matches("^F[A-F0-9]33") -> {
                 String decimal = "01010110"; //V = 56 = 0101 0110 en binaire
                 decimal += decimal + Integer.toBinaryString(Integer.parseInt(String.valueOf(opcode.charAt(2)), 16));
-                int adressI1 = Integer.parseInt(adressI, 16) + 1;
-                int adressI2 = Integer.parseInt(adressI, 16) + 2;
                 //manage if VX is in tens or units, it will get shifted (4, 8 or 12 digits in the Vx decimal)
                 //not sure it can happen but better safe than sorry
-                if(Vx.length() == 4){
+                if(Integer.toBinaryString(registersV[x]).length() == 4){ //TODO
                     //only units
-                    memory[adressI2] = Integer.parseInt(decimal,16);
+                    memory[adressI + 2] = Integer.parseInt(decimal,16);
                 }
-                else if(Vx.length() == 8){
+                else if(Integer.toBinaryString(registersV[x]).length() == 8){
                     //tens and units
-                    memory[adressI1] = Integer.parseInt(decimal.substring(0,4),16);
-                    memory[adressI2] = Integer.parseInt(decimal.substring(4),16);
+                    memory[adressI + 1] = Integer.parseInt(decimal.substring(0,4),16);
+                    memory[adressI + 2] = Integer.parseInt(decimal.substring(4),16);
                 }
-                else if(Vx.length() == 12){
+                else if(Integer.toBinaryString(registersV[x]).length() == 12){
                     //hundreds tens and units
-                    memory[Integer.parseInt(adressI, 16)] = Integer.parseInt(decimal.substring(0,4),16);
-                    memory[adressI1] = Integer.parseInt(decimal.substring(4,8),16);
-                    memory[adressI2] = Integer.parseInt(decimal.substring(8),16);
+                    memory[adressI] = Integer.parseInt(decimal.substring(0,4),16);
+                    memory[adressI + 1] = Integer.parseInt(decimal.substring(4,8),16);
+                    memory[adressI + 2] = Integer.parseInt(decimal.substring(8),16);
                 }
             }
             case String s when s.matches("^F[A-F0-9]55") -> {
                 for(int registerIndex = 0; registerIndex <= x; registerIndex++){
-                    memory[Integer.parseInt(adressI, 16) + registerIndex] = registersV[registerIndex];
+                    memory[adressI + registerIndex] = registersV[registerIndex];
                 }
             }
             case String s when s.matches("^F[A-F0-9]65") -> {
                 // read values from memory, starting from I, and dump them in the corresponding registers
                 for(int registerIndex = 0; registerIndex <= x; registerIndex++){
-                   registersV[registerIndex] = memory[Integer.parseInt(adressI, 16) + registerIndex];
+                   registersV[registerIndex] = memory[adressI + registerIndex];
                 }
             }
             default -> System.out.println("ERROR : OPCODE UNKNOWN");

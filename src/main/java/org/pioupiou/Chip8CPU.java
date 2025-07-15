@@ -3,10 +3,8 @@ package org.pioupiou;
 public class Chip8CPU {
     private int[] memory = new int[4096];
     private boolean[][] display = new boolean[32][64];//binary
-    private String Vx = "V0";
-    private String Vy = "V0";
     private boolean drawFlag;
-    Opcodes opcodes = new Opcodes(display, memory, Vx, Vy);
+    Opcodes opcodes = new Opcodes(display, memory);
 
     public void initialize(){
 
