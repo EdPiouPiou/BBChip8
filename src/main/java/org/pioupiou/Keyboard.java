@@ -1,5 +1,7 @@
 package org.pioupiou;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +9,7 @@ import java.util.Map;
 public class Keyboard {
     private Map<Integer,Integer> keymap = new HashMap<Integer, Integer>();
     private boolean[] keysPressed;
+    private JFrame testJFrame = new JFrame(); //needs one to detect key events //TODO to clean and re-architecture later
 
     public Keyboard(){
         keymap.put(0,0x0);
@@ -27,6 +30,20 @@ public class Keyboard {
         keymap.put(0,0xF);
 
         keysPressed = new boolean[16]; //init keys pressed to empty
+
+        //class abstract action TO EVOLVE/MOVE SOMEWHERE
+        class ActionAPressed extends AbstractAction{
+            public ActionAPressed() {
+            }
+            public void actionPerformed(ActionEvent e) {
+                onNextKeyPress(Integer.parseInt("A"));
+            }
+        }
+        testJFrame.getRootPane().getInputMap().put(KeyStroke.getKeyStroke("A"), "aPressed");
+        ActionAPressed aPressed = new ActionAPressed();
+        testJFrame.getRootPane().getActionMap().put("aPressed", aPressed);
+        //FIN GESTION EXAMPLE KEYSTROKE
+
     }
 
     public boolean isKeyPressed(int keycode){

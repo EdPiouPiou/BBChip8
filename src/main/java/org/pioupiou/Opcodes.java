@@ -17,6 +17,8 @@ public class Opcodes {
     private int y;
     private int opcodeInt;
     private int[] registersV = new int[16];
+    private boolean paused;
+    private Keyboard keyboard = new Keyboard();
 
     public Opcodes(boolean[][] display, int[] memory) {
         this.display = display;
@@ -176,7 +178,14 @@ public class Opcodes {
                 }
             }
             case String s when s.matches("^F[A-F0-9]07") -> registersV[x] = getDelay();
-            case String s when s.matches("^F[A-F0-9]0A") -> registersV[x] = getKey();
+            case String s when s.matches("^F[A-F0-9]0A") -> {
+                paused = true;
+                if(keyboard.onNextKeyPress(key) != -1){
+                    registersV[x] = getKey();
+                    paused = false;
+                }
+
+            }
             case String s when s.matches("^F[A-F0-9]15") -> delayTimer = registersV[x];
             case String s when s.matches("^F[A-F0-9]18") -> soundTimer = registersV[x];
             case String s when s.matches("^F[A-F0-9]1E") -> {
