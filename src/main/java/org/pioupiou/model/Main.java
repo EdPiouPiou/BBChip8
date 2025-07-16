@@ -1,4 +1,4 @@
-package org.pioupiou;
+package org.pioupiou.model;
 
 public class Main {
 

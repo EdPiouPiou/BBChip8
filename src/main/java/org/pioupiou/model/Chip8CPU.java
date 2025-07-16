@@ -1,4 +1,4 @@
-package org.pioupiou;
+package org.pioupiou.model;
 
 public class Chip8CPU {
     private int[] memory = new int[4096];
@@ -26,6 +26,7 @@ public class Chip8CPU {
 
         //decode opcode
         //execute opcode
+        opcodes.executeOpcode(Integer.toHexString(opcode));
     }
 
     public boolean getDrawFlag() {

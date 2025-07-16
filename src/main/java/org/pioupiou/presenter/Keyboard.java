@@ -1,8 +1,7 @@
-package org.pioupiou;
+package org.pioupiou.presenter;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,7 +30,7 @@ public class Keyboard {
 
         keysPressed = new boolean[16]; //init keys pressed to empty
 
-        //class abstract action TO EVOLVE/MOVE SOMEWHERE
+        //class abstract action TO EVOLVE/MOVE SOMEWHERE //TODO move to view for keystroke detection
         class ActionAPressed extends AbstractAction{
             public ActionAPressed() {
             }
@@ -78,7 +77,7 @@ public class Keyboard {
         return currentKey;
     }
 
-    public int onNextKeyPress(int key){ //TODO
+    public int onNextKeyPress(int key){
         return key;
     }
 }
