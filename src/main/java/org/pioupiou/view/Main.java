@@ -1,6 +1,13 @@
-package org.pioupiou.model;
+package org.pioupiou.view;
 
-public class Main {
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import org.pioupiou.model.Chip8CPU;
+import javafx.application.Application;
+
+public class Main extends Application{
 
     private static Chip8CPU chip8;
 
@@ -33,4 +40,13 @@ public class Main {
     private static void setupInput(){
 
     };
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        Pane rootPane = new BorderPane();
+        Scene scene = new Scene(rootPane);
+        stage.setScene(scene);
+        stage.setTitle("BBChip8 - JavaFX Chip8 Emulator");
+        stage.show();
+    }
 }

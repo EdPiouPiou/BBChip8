@@ -1,6 +1,6 @@
 package org.pioupiou.model;
 
-import org.pioupiou.presenter.Keyboard;
+import org.pioupiou.utils.Keyboard;
 
 import java.util.ArrayList;
 import java.util.List;

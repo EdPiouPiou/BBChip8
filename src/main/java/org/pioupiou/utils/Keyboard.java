@@ -1,4 +1,4 @@
-package org.pioupiou.presenter;
+package org.pioupiou.utils;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
