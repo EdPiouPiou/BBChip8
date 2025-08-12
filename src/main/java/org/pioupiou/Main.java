@@ -1,15 +1,11 @@
 package org.pioupiou;
 
-import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
-import org.pioupiou.model.Chip8CPU;
+import org.pioupiou.model.Chip8CPUImpl;
 import javafx.application.Application;
 
 public class Main {
 
-    private static Chip8CPU chip8;
+    private static Chip8CPUImpl chip8;
 
     public static void main(String[] args) {
         Application.launch(BB8App.class);
