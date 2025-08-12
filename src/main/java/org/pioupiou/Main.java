@@ -1,4 +1,4 @@
-package org.pioupiou.view;
+package org.pioupiou;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 import org.pioupiou.model.Chip8CPU;
 import javafx.application.Application;
 
-public class Main extends Application{
+public class Main {
 
     private static Chip8CPU chip8;
 
@@ -33,20 +33,11 @@ public class Main extends Application{
     // methods
     private static void drawGraphics(){
 
-    };
+    }
     private static void setupGraphics(){
 
-    };
+    }
     private static void setupInput(){
 
-    };
-
-    @Override
-    public void start(Stage stage) throws Exception {
-        Pane rootPane = new BorderPane();
-        Scene scene = new Scene(rootPane);
-        stage.setScene(scene);
-        stage.setTitle("BBChip8 - JavaFX Chip8 Emulator");
-        stage.show();
     }
 }
