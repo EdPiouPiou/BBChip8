@@ -12,6 +12,7 @@ public class Main {
     private static Chip8CPU chip8;
 
     public static void main(String[] args) {
+        Application.launch(BB8App.class);
         //set up display and prep for user input
         setupGraphics();
         setupInput();
