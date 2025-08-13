@@ -6,14 +6,17 @@ public class Chip8CPUImpl implements Chip8CPU{
     private boolean drawFlag;
     Opcodes opcodes = new Opcodes(display, memory);
 
+    @Override
     public void initialize(){
 
     }
 
+    @Override
     public void loadGame(String gameName){
 
     }
 
+    @Override
     public void emulate(){
         //fetch opcode
         int programCounter = 0; //will be dependent of input
@@ -29,11 +32,23 @@ public class Chip8CPUImpl implements Chip8CPU{
         opcodes.executeOpcode(Integer.toHexString(opcode));
     }
 
+    @Override
     public boolean getDrawFlag() {
         return drawFlag;
     }
 
+    @Override
     public void setDrawFlag(boolean drawFlag) {
         this.drawFlag = drawFlag;
+    }
+
+    @Override
+    public void getKeyPressed(String keyPressed) {
+
+    }
+
+    @Override
+    public void getKeyReleased(String keyReleased) {
+
     }
 }

@@ -1,5 +1,6 @@
 package org.pioupiou.view;
 
+import javafx.scene.input.KeyEvent;
 import org.pioupiou.core.ViewHandler;
 import org.pioupiou.core.ViewModelFactory;
 
@@ -12,13 +13,13 @@ public class ViewController {
         this.viewHandler = viewHandler;
         this.viewModel = viewModel;
     }
-    public void onKeyPressed(){
+    public void onKeyPressed(KeyEvent keyPressed){
         System.out.println("pressed");
-        viewModel.sendKeyPressedToCPU();
+        viewModel.sendKeyPressedToCPU(keyPressed.getText());
     }
 
-    public void onKeyReleased(){
+    public void onKeyReleased(KeyEvent keyReleased){
         System.out.println("released");
-        viewModel.sendKeyReleasedToCPU();
+        viewModel.sendKeyReleasedToCPU(keyReleased.getText());
     }
 }
