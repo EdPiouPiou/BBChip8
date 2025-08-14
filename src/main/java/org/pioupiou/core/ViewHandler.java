@@ -45,4 +45,8 @@ public class ViewHandler {
         }
 
     }
+
+    public Stage getBb8Stage() {
+        return bb8Stage;
+    }
 }

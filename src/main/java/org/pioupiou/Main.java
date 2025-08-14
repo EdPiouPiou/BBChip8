@@ -3,6 +3,8 @@ package org.pioupiou;
 import org.pioupiou.model.Chip8CPUImpl;
 import javafx.application.Application;
 
+import java.io.File;
+
 public class Main {
 
     private static Chip8CPUImpl chip8;
@@ -15,7 +17,7 @@ public class Main {
 
         //init chip8 and load game
         chip8.initialize();
-        chip8.loadGame("pong");
+        chip8.loadGame(new File(""));
 
         for(;;){
             chip8.emulate();

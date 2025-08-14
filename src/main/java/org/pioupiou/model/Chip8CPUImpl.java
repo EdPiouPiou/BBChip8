@@ -1,5 +1,7 @@
 package org.pioupiou.model;
 
+import java.io.*;
+
 public class Chip8CPUImpl implements Chip8CPU{
     private int[] memory = new int[4096];
     private boolean[][] display = new boolean[32][64];//binary
@@ -12,7 +14,20 @@ public class Chip8CPUImpl implements Chip8CPU{
     }
 
     @Override
-    public void loadGame(String gameName){
+    public void loadGame(File chip8ROM){
+        System.out.println(chip8ROM.toString());
+        try (FileInputStream fileInputStream = new FileInputStream(chip8ROM);){
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream));
+            String line;
+            while((line = reader.readLine()) != null){
+                
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
