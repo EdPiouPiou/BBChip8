@@ -33,4 +33,8 @@ public class ViewController {
         File file = fileChooser.showOpenDialog(viewHandler.getBb8Stage());
         viewModel.sendFileToCPU(file);
     }
+
+    public void drawPixel(int posx, int posy, int value){
+        viewModel.getPixelToDraw();
+    }
 }

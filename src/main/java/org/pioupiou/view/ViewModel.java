@@ -25,4 +25,8 @@ public class ViewModel {
     public void sendFileToCPU(File chip8ROM){
         chip8CPU.loadGame(chip8ROM);
     }
+
+    //TODO, will get image to draw from CPU Impl
+    public void getPixelToDraw() {
+    }
 }

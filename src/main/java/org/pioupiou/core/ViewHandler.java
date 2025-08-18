@@ -3,6 +3,7 @@ package org.pioupiou.core;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 import org.pioupiou.view.ViewController;
 
@@ -44,6 +45,10 @@ public class ViewHandler {
           exception.printStackTrace();
         }
 
+    }
+    private void draw(ViewController viewController){
+        viewController.drawPixel(1,1, 1);
+        GraphicsContext gc = null;
     }
 
     public Stage getBb8Stage() {
