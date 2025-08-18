@@ -31,7 +31,6 @@ public class ViewController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Chip 8 ROMs", "*.ch8"));
         File file = fileChooser.showOpenDialog(viewHandler.getBb8Stage());
-        System.out.println(file.getName());
         viewModel.sendFileToCPU(file);
     }
 }

@@ -14,13 +14,21 @@ public class Chip8CPUImpl implements Chip8CPU{
     }
 
     @Override
-    public void loadGame(File chip8ROM){
+    public void loadGame(File chip8ROM) {
         System.out.println(chip8ROM.toString());
-        try (FileInputStream fileInputStream = new FileInputStream(chip8ROM);){
-            BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream));
-            String line;
-            while((line = reader.readLine()) != null){
-                
+        try (FileInputStream fileInputStream = new FileInputStream(chip8ROM);) {
+            byte[] hexByte = new byte[fileInputStream.available()];
+            fileInputStream.read(hexByte);
+            int pc = 0;
+            //NB : 1 op in ch8 file = 16 bits, 8 bits = 1 byte, 1 byte per memory slot, hence for one opcode we use memory[n] and memory [n+1]
+            // for every opcode = 2 bytes, pc += 2
+            for (byte b : hexByte) {
+                if (pc == 0) {
+                    memory[0x200] = b;
+                } else {
+                    memory[0x200 + pc] = b;
+                }
+                pc++;
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -28,10 +36,9 @@ public class Chip8CPUImpl implements Chip8CPU{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
-    @Override
+        @Override
     public void emulate(){
         //fetch opcode
         int programCounter = 0; //will be dependent of input
