@@ -3,19 +3,25 @@ package org.pioupiou.core;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.PixelFormat;
+import javafx.scene.image.PixelWriter;
 import javafx.stage.Stage;
 import org.pioupiou.view.ViewController;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
 public class ViewHandler {
 
     private Scene bb8Scene;
     private Stage bb8Stage;
     private ViewModelFactory viewModelFactory;
+    private Canvas screen; //bind canvas defined in fxml file with the handler
 
     public ViewHandler(ViewModelFactory viewModelFactory){
         this.viewModelFactory = viewModelFactory;
@@ -46,9 +52,15 @@ public class ViewHandler {
         }
 
     }
-    private void draw(ViewController viewController){
-        viewController.drawPixel(1,1, 1);
-        GraphicsContext gc = null;
+
+    public void draw(ViewController viewController, int[] sprite, int xcoord, int ycoord, int height){
+        GraphicsContext gc = viewController.screen.getGraphicsContext2D();
+        PixelWriter pixelWriter = gc.getPixelWriter();
+        final int WIDTH = 8;
+        int h = 5;
+        int offset = 0;
+        int scanlineStride = 0;
+        pixelWriter.setPixels(xcoord, ycoord, WIDTH, h, PixelFormat.getIntArgbInstance(), sprite, offset, scanlineStride);
     }
 
     public Stage getBb8Stage() {

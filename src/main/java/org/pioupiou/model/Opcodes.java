@@ -21,6 +21,7 @@ public class Opcodes {
     private int[] registersV = new int[16];
     private boolean paused;
     private Keyboard keyboard = new Keyboard();
+    private int[][] currentScreenState = new int[32][64];
 
     public Opcodes(boolean[][] display, int[] memory) {
         this.display = display;
@@ -250,7 +251,17 @@ public class Opcodes {
         return 0;
     }
 
-    private int renderSprite(int coordX, int coordY){
-        return 0;
+    private Sprite renderSprite(int coordX, int coordY, int N){
+        int[][] pixels = new int[N][8];
+        int countWidth = 0;
+        int countHeight = 0;
+        for(int row = coordX; row < coordX + 8; row++){
+            for (int col = coordY; col < coordY + N; col++){
+                if(currentScreenState[row][col] == 0) pixels[countHeight][countWidth] = 0x00;
+                else pixels[countHeight][countWidth] = 0x00;
+
+            }
+        }
+        return new Sprite(pixels, coordX, coordY, N);
     }
 }

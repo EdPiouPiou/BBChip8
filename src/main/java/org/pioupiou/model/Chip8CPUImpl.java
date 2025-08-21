@@ -15,7 +15,6 @@ public class Chip8CPUImpl implements Chip8CPU{
 
     @Override
     public void loadGame(File chip8ROM) {
-        System.out.println(chip8ROM.toString());
         try (FileInputStream fileInputStream = new FileInputStream(chip8ROM);) {
             byte[] hexByte = new byte[fileInputStream.available()];
             fileInputStream.read(hexByte);
@@ -38,7 +37,12 @@ public class Chip8CPUImpl implements Chip8CPU{
         }
     }
 
-        @Override
+    @Override
+    public Sprite getSprite() {
+        return null;
+    }
+
+    @Override
     public void emulate(){
         //fetch opcode
         int programCounter = 0; //will be dependent of input

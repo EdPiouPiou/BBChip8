@@ -33,7 +33,7 @@
    <center>
       <Pane prefHeight="299.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <Canvas height="327.0" width="600.0" focusTraversable="true" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" />
+            <Canvas fx:id="screen" height="327.0" width="600.0" focusTraversable="true" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" />
          </children>
       </Pane>
    </center>

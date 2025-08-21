@@ -1,8 +1,7 @@
 package org.pioupiou.view;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import org.pioupiou.model.Chip8CPU;
+import org.pioupiou.model.Sprite;
 
 import java.io.File;
 
@@ -27,6 +26,7 @@ public class ViewModel {
     }
 
     //TODO, will get image to draw from CPU Impl
-    public void getPixelToDraw() {
+    public Sprite getSpriteToDraw() {
+        return null;
     }
 }

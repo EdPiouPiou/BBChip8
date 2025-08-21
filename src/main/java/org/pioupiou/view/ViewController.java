@@ -1,15 +1,17 @@
 package org.pioupiou.view;
 
 import javafx.event.ActionEvent;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import org.pioupiou.core.ViewHandler;
-import org.pioupiou.core.ViewModelFactory;
+import org.pioupiou.model.Sprite;
 
 import java.io.File;
 
 public class ViewController {
 
+    public Canvas screen;
     private ViewHandler viewHandler;
     private ViewModel viewModel;
 
@@ -34,7 +36,13 @@ public class ViewController {
         viewModel.sendFileToCPU(file);
     }
 
-    public void drawPixel(int posx, int posy, int value){
-        viewModel.getPixelToDraw();
+    public void drawPixel(int posx, int posy, int height){
+        Sprite sprite = viewModel.getSpriteToDraw();
+        screen = (Canvas) viewHandler.getBb8Stage().getScene().lookup("screen");
+        for(int row = 0; row < height; row++){
+            viewHandler.draw(this, sprite.getPixels()[row], posx, posy, height);
+        }
     }
+
+
 }

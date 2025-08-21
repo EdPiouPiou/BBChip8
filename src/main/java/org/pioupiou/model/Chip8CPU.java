@@ -19,4 +19,6 @@ public interface Chip8CPU {
     void getKeyReleased(String keyReleased);
 
     void loadGame(File chip8ROM);
+
+    Sprite getSprite();
 }
