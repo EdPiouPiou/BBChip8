@@ -8,6 +8,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 import javafx.stage.Stage;
+import org.pioupiou.model.Sprite;
 import org.pioupiou.view.ViewController;
 
 import java.io.IOException;
@@ -53,14 +54,17 @@ public class ViewHandler {
 
     }
 
-    public void draw(ViewController viewController, int[] sprite, int xcoord, int ycoord, int height){
+    public void draw(ViewController viewController, Sprite sprite){
         GraphicsContext gc = viewController.screen.getGraphicsContext2D();
         PixelWriter pixelWriter = gc.getPixelWriter();
         final int WIDTH = 8;
-        int h = 5;
+        final int LINE_HEIGHT = 1;
         int offset = 0;
         int scanlineStride = 0;
-        pixelWriter.setPixels(xcoord, ycoord, WIDTH, h, PixelFormat.getIntArgbInstance(), sprite, offset, scanlineStride);
+        for(int spriteHeight = 0; spriteHeight < sprite.getHeight(); spriteHeight++){
+            pixelWriter.setPixels(sprite.getXcoord(), sprite.getYcoord(), WIDTH, LINE_HEIGHT, PixelFormat.getIntArgbInstance(), sprite.getPixels()[spriteHeight], offset, scanlineStride);
+        }
+
     }
 
     public Stage getBb8Stage() {

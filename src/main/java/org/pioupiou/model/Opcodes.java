@@ -159,9 +159,10 @@ public class Opcodes {
                     //draw sprite, each sprite is 8 pixels wide
                     for(int column = 0; column < 8; column++){
                         if((sprite & 0x80) > 0 ) { //if bit/sprite not 0, render or erase the pixel at given column
+                            /**
                             if(this.renderSprite( registersV[x] + column, registersV[y] + heightIndex) == 1){ //set Vf to 1 if pixel is erased
                                 registersV[0xF] = 1;
-                            }
+                            }**/
                         }
                         sprite <<= 1; //left shift sprite by 1 to move next column/bit of the sprite
                     }
@@ -257,8 +258,8 @@ public class Opcodes {
         int countHeight = 0;
         for(int row = coordX; row < coordX + 8; row++){
             for (int col = coordY; col < coordY + N; col++){
-                if(currentScreenState[row][col] == 0) pixels[countHeight][countWidth] = 0x00;
-                else pixels[countHeight][countWidth] = 0x00;
+                if(currentScreenState[row][col] == 0) pixels[countHeight][countWidth] = 0xFF000000; //aarrggbb hex for black
+                else pixels[countHeight][countWidth] = 0xFFFFFFFF; //aarrggbb hex for white
 
             }
         }

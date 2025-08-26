@@ -40,7 +40,7 @@ public class ViewController {
         Sprite sprite = viewModel.getSpriteToDraw();
         screen = (Canvas) viewHandler.getBb8Stage().getScene().lookup("screen");
         for(int row = 0; row < height; row++){
-            viewHandler.draw(this, sprite.getPixels()[row], posx, posy, height);
+            viewHandler.draw(this, sprite);
         }
     }
 
