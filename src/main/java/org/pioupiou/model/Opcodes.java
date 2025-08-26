@@ -156,20 +156,19 @@ public class Opcodes {
                     //read sprite from memory
                     int sprite = memory[adressI + heightIndex];
 
-                    //draw sprite, each sprite is 8 pixels wide
+                    //draw a sprite line, each sprite is 8 pixels wide
                     for(int column = 0; column < 8; column++){
-                        if((sprite & 0x80) > 0 ) { //if bit/sprite not 0, render or erase the pixel at given column
-                            /**
-                            if(this.renderSprite( registersV[x] + column, registersV[y] + heightIndex) == 1){ //set Vf to 1 if pixel is erased
+                        if((sprite & 0x80) != 0 ) { //if bit/sprite not 0, render or erase the pixel at given column
+                            if(currentScreenState[coordY+column][coordX+heightIndex] == 1){ //set Vf to 1 if collision with currentScreenState (2 "on"/white pixels at the same location at the same time)
                                 registersV[0xF] = 1;
-                            }**/
+                            }
+                            currentScreenState[coordY+column][coordX+heightIndex] ^= 1; //set the pixel in current screen state with a XOR op
                         }
                         sprite <<= 1; //left shift sprite by 1 to move next column/bit of the sprite
                     }
                 }
-
-                //compare values between already present pixel and new one with a XOR op
-
+                //drawFlag = true;
+                programCounter +=2;
             }
             case String s when s.matches("^E[A-F0-9]9E") -> {
                 if(this.getKey() == x){
