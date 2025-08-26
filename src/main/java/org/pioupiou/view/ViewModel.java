@@ -25,8 +25,7 @@ public class ViewModel {
         chip8CPU.loadGame(chip8ROM);
     }
 
-    //TODO, will get image to draw from CPU Impl
     public Sprite getSpriteToDraw() {
-        return null;
+        return chip8CPU.getSprite();
     }
 }
