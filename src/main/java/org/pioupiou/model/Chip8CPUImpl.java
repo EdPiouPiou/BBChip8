@@ -29,11 +29,12 @@ public class Chip8CPUImpl implements Chip8CPU{
             // for every opcode = 2 bytes, pc += 2
             for(int index = 0; index < hexByte.length - 1; index+=2){
                 if (pc == 0x200) {
-                    memory[0x200] = hexByte[index] & 0xFF; //use 0xFF to go from signed byte to unsigned int
-                    memory[0x200+1] = hexByte[index+1] & 0xFF;
+                    this.fillMemory(0x200, index, hexByte);
+                    this.fillMemory(0x200+1, index+1, hexByte);
+
                 } else {
-                    memory[0x200 + pc] = hexByte[index] & 0xFF;
-                    memory[0x200 + pc + 1] = hexByte[index+1] & 0xFF;
+                    this.fillMemory(pc, index, hexByte);
+                    this.fillMemory(pc + 1, index + 1, hexByte);
                 }
                 pc+=2; //up local pc to two while loading game but do not change opcode program counter
             }
@@ -88,6 +89,13 @@ public class Chip8CPUImpl implements Chip8CPU{
     @Override
     public void getKeyReleased(String keyReleased) {
 
+    }
+
+    private void fillMemory(int memoryIndex, int hexByteIndex, byte[] hexByte){
+        if(hexByte[hexByteIndex] < 0){
+            memory[memoryIndex] = hexByte[hexByteIndex] & 0xFF; //use 0xFF to go from signed byte to unsigned int
+        }
+        else memory[memoryIndex] = hexByte[hexByteIndex];
     }
 
     public void setOpcodes(Opcodes opcodes) {
