@@ -28,4 +28,8 @@ public class ViewModel {
     public Sprite getSpriteToDraw() {
         return chip8CPU.getSprite();
     }
+
+    public boolean isDrawFlag() {
+        return chip8CPU.isDrawFlag();
+    }
 }

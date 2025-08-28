@@ -9,7 +9,7 @@ public interface Chip8CPU {
 
     void emulate();
 
-    boolean getDrawFlag();
+    boolean isDrawFlag();
 
     void setDrawFlag(boolean drawFlag);
 

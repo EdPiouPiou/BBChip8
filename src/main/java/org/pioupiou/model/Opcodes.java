@@ -23,11 +23,13 @@ public class Opcodes {
     private Keyboard keyboard = new Keyboard();
     private int[][] currentScreenState = new int[32][64];
     private Sprite spriteToBeRendered;
+    private boolean drawFlag;
 
     public Opcodes(boolean[][] display, int[] memory, int programCounter) {
         this.display = display;
         this.memory = memory;
         this.programCounter = programCounter;
+        this.drawFlag = false;
     }
 
     public void executeOpcode(String opcode){
@@ -153,7 +155,7 @@ public class Opcodes {
                 int coordX = registersV[x];
                 //coordinates Y stocked in Vy
                 int coordY = registersV[y];
-                int nibble = Integer.parseInt(opcode.substring(5)); //DXYN got as 0xDXYN so N is last nibble, it represents the height of the sprite
+                int nibble = Integer.parseInt(opcode.substring(3), 16); //DXYN got as 0xDXYN so N is last nibble, it represents the height of the sprite
                 for(int heightIndex = 0; heightIndex < nibble; heightIndex++){
                     //read sprite from memory
                     int sprite = memory[adressI + heightIndex];
@@ -169,7 +171,9 @@ public class Opcodes {
                         sprite <<= 1; //left shift sprite by 1 to move next column/bit of the sprite
                     }
                 }
-                //drawFlag = true;
+                //once current screen state is filled properly, render the sprite and sent it to GUI
+                this.renderSprite(coordX, coordY, nibble);
+                drawFlag = true;
                 programCounter +=2;
             }
             case String s when s.matches("^e[a-f0-9]9e") -> {
@@ -233,7 +237,7 @@ public class Opcodes {
                    registersV[registerIndex] = memory[adressI + registerIndex];
                 }
             }
-            default -> System.out.println("ERROR : OPCODE UNKNOWN");
+            default -> System.out.println("ERROR : OPCODE " + opcode + " UNKNOWN");
         }
     }
 
@@ -278,4 +282,13 @@ public class Opcodes {
     public Sprite getSpriteToBeRendered() {
         return spriteToBeRendered;
     }
+
+    public boolean isDrawFlag() {
+        return drawFlag;
+    }
+
+    public void setDrawFlag(boolean drawFlag) {
+        this.drawFlag = drawFlag;
+    }
+
 }

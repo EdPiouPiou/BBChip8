@@ -34,12 +34,15 @@ public class ViewController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Chip 8 ROMs", "*.ch8"));
         File file = fileChooser.showOpenDialog(viewHandler.getBb8Stage());
         viewModel.sendFileToCPU(file);
+        while(viewModel.isDrawFlag()){
+            this.drawPixel();
+        }
     }
 
-    public void drawPixel(int posx, int posy, int height){
+    public void drawPixel(){
         Sprite sprite = viewModel.getSpriteToDraw();
-        screen = (Canvas) viewHandler.getBb8Stage().getScene().lookup("screen");
-        for(int row = 0; row < height; row++){
+        screen = (Canvas) viewHandler.getBb8Stage().getScene().lookup("#screen");
+        for(int row = 0; row < sprite.getHeight(); row++){
             viewHandler.draw(this, sprite);
         }
     }

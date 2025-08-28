@@ -39,7 +39,7 @@ public class Chip8CPUImpl implements Chip8CPU{
                 pc+=2; //up local pc to two while loading game but do not change opcode program counter
             }
             //once game is loaded in memory, start emulation loop
-            for(;;) {
+            while(opcodes.getProgramCounter() < 4096) {
                 this.emulate();
             }
         } catch (FileNotFoundException e) {
@@ -72,8 +72,8 @@ public class Chip8CPUImpl implements Chip8CPU{
     }
 
     @Override
-    public boolean getDrawFlag() {
-        return drawFlag;
+    public boolean isDrawFlag() {
+        return opcodes.isDrawFlag();
     }
 
     @Override
