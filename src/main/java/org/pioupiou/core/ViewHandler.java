@@ -7,6 +7,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import org.pioupiou.model.Sprite;
 import org.pioupiou.view.ViewController;
@@ -43,10 +45,15 @@ public class ViewHandler {
             ViewController viewController = loader.getController();
             viewController.init(this, viewModelFactory.getViewModel());
 
+            //Rectangle background = new Rectangle(327, 600, Paint.valueOf("black"));
             bb8Scene = new Scene(root);
             bb8Stage.setScene(bb8Scene);
             bb8Stage.setTitle("BBChip8");
             bb8Stage.show();
+
+            GraphicsContext gc = viewController.screen.getGraphicsContext2D();
+            gc.setFill(Paint.valueOf("black"));
+            gc.fillRect(0,0, 1000, 1000); //fills canvas black, attribute fillPaint
         }
         catch (IOException exception){
           exception.printStackTrace();
@@ -61,8 +68,15 @@ public class ViewHandler {
         final int LINE_HEIGHT = 1;
         int offset = 0;
         int scanlineStride = 0;
+        int[] formattedSpriteLine = new int[8];
         for(int spriteHeight = 0; spriteHeight < sprite.getHeight(); spriteHeight++){
-            pixelWriter.setPixels(sprite.getXcoord(), sprite.getYcoord(), WIDTH, LINE_HEIGHT, PixelFormat.getIntArgbInstance(), sprite.getPixels()[spriteHeight], offset, scanlineStride);
+            int[] pixelLine = sprite.getPixels()[spriteHeight];
+            /**
+            for(int index = 0; index < pixelLine.length; index++){
+                if(pixelLine[index] == 0) formattedSpriteLine[index] = 0xFF000000;
+                else formattedSpriteLine[index] = 0xFFFFFFFF;
+            }**/
+            pixelWriter.setPixels(sprite.getXcoord(), sprite.getYcoord(), WIDTH, LINE_HEIGHT, PixelFormat.getIntArgbInstance(), pixelLine, offset, scanlineStride);
         }
 
     }

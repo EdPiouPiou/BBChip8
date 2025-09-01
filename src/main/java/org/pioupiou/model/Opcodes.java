@@ -149,6 +149,7 @@ public class Opcodes {
                 registersV[x] = random & Integer.parseInt(opcode.substring(2), 16);
             }
             case String s when s.matches("^d([a-f0-9]{3})") -> {
+                System.out.println("OPCODE DESSIN " + opcode);
                 //init VF to 0
                 registersV[0xF] = 0;
                 //coordinates X stocked in Vx
@@ -259,14 +260,15 @@ public class Opcodes {
 
     protected void renderSprite(int coordX, int coordY, int N){
         int[][] pixels = new int[N][8];
-        int countWidth = 0;
         int countHeight = 0;
-        for(int row = coordX; row < coordX + 8; row++){
-            for (int col = coordY; col < coordY + N; col++){
-                if(currentScreenState[row][col] == 0) pixels[countHeight][countWidth] = 0xFF000000; //aarrggbb hex for black
-                else pixels[countHeight][countWidth] = 0xFFFFFFFF; //aarrggbb hex for white
-
+        for(int row = coordX; row < coordX + N; row++){
+            int countWidth = 0;
+            for (int col = coordY; col < coordY + 8; col++){
+                if(currentScreenState[row][col] == 0) pixels[countHeight][countWidth] = 0; //  0xFF000000 aarrggbb hex for black
+                else pixels[countHeight][countWidth] = 1; //0xFFFFFFFF aarrggbb hex for white
+                countWidth++;
             }
+            countHeight++;
         }
         this.spriteToBeRendered = new Sprite(pixels, coordX, coordY, N);
     }
